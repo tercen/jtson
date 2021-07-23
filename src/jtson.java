@@ -1,3 +1,4 @@
+import java.io.IOException;
 
 public class jtson {
 	
@@ -5,7 +6,7 @@ public class jtson {
 	    return new Serializer(object).getBytes();
 	}	
 
-	public static Object decodeTSON(byte[] bytes) {
+	public static Object decodeTSON(byte[] bytes) throws TsonError, IOException {
 	    return new DeSerializer(bytes).getObject();
 	}
 

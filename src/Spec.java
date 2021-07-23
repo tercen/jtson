@@ -1,5 +1,5 @@
 
-public final class Constants {
+public final class Spec {
 	
 	public static final String TSON_SPEC_VERSION = "1.1.0";
 
