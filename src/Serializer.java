@@ -12,7 +12,6 @@ public class Serializer {
 	public Serializer(Object obj) {
 		this.bos = new ByteArrayOutputStream();
 		try {
-			//this.bos.write("\1".getBytes()); //start of header
 			this.addString(Spec.TSON_SPEC_VERSION);
 			this.addObject(obj);
 		} catch (TsonError e) {
@@ -23,11 +22,11 @@ public class Serializer {
 	}
 
 	private void addType(int type) throws UnsupportedEncodingException {
-		bos.write(Conversion.getByteFromInt(type));
+		this.bos.write(Utils.getByteFromInt(type));
 	}
 
 	private void addLength(int length) throws IOException {
-		bos.write(Conversion.getBytesFromInt(length));
+		this.bos.write(Utils.getBytesFromInt(length));
 	}
 
 	private void addObject(Object obj) throws TsonError, IOException {
@@ -64,26 +63,24 @@ public class Serializer {
 
 	private void addInteger(Integer obj) throws IOException {
 		this.addType(Spec.INTEGER_TYPE);
-		bos.write(Conversion.getBytesFromInt(obj));
+		this.bos.write(Utils.getBytesFromInt(obj));
 	}
 
 	private void addDouble(Double obj) throws IOException {
 		this.addType(Spec.DOUBLE_TYPE);
-		//this.bos.write(String.valueOf("<d" + obj).getBytes());
-		this.bos.write(String.valueOf(obj).getBytes());
+		this.bos.write(Utils.getBytesFromDouble(obj));
 	}
 
 	private void addBoolean(Boolean obj) throws IOException {
 		this.addType(Spec.BOOL_TYPE);
-		//this.bos.write(String.valueOf("<B" + obj).getBytes());
-		this.bos.write(String.valueOf(obj).getBytes());
+		this.bos.write(Utils.getByteFromBoolean(obj));
 	}
 
-	private void addList(List obj) throws IOException, TsonError {
+	private void addList(List<Object> list) throws IOException, TsonError {
 		this.addType(Spec.LIST_TYPE);
-        this.addLength(obj.size());
+        this.addLength(list.size());
 
-        for (Object item : obj) {
+        for (Object item : list) {
         	this.addObject(item);
         }
 	}

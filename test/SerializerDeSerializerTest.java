@@ -12,14 +12,13 @@ public class SerializerDeSerializerTest {
 			byte[] result = jtson.encodeTSON(input);
 			Object decodeOutput = jtson.decodeTSON(result);
 			
-			
 			Assert.assertEquals(input.getClass(), decodeOutput.getClass());
 			Map output = (Map) decodeOutput;
-			Assert.assertEquals(input.get("tercen"), output.get("tercen"));
+			Assert.assertEquals(input, output);
 			
 			System.out.print(result);
 		} catch (Exception e) {
-			System.out.print("Cannot create empty list object");
+			System.out.print("SerializerDeSerializerTest error:" + e.getMessage());
 		}
 	}
 }

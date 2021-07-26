@@ -1,6 +1,5 @@
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,8 +8,7 @@ import java.util.Map;
 public class DeSerializer {
 	
 	private Object object;
-	private byte[] bytes;
-	private ByteArrayInputStream reader; 
+	private ByteArrayInputStream bis; 
 	
 	public DeSerializer(byte[] bytes) throws TsonError, IOException {
 		if (bytes == null) {
@@ -20,9 +18,7 @@ public class DeSerializer {
         if (bytes.length == 0) {
         	throw new TsonError("Connection buffer is empty.");
         }
-
-        this.bytes = bytes;
-        this.reader = new ByteArrayInputStream(bytes);
+        this.bis = new ByteArrayInputStream(bytes);
         
         Object versionObject = readObject();
         if (!versionObject.getClass().getName().equals("java.lang.String")) {
@@ -38,11 +34,11 @@ public class DeSerializer {
 	}
 	
 	private int readType() throws IOException {
-		return(reader.read());
+		return(this.bis.read());
 	}
 
 	private long readLength() throws TsonError, IOException {
-		int len = Conversion.getIntFromByteArray(reader.readNBytes(4));
+		int len = Utils.getIntFromByteArray(this.bis.readNBytes(4));
 
         if (len <= 0)
         	throw new TsonError(String.format("Found invalid length %d", len));
@@ -76,7 +72,7 @@ public class DeSerializer {
     private String readString() throws IOException {
         StringBuffer result = new StringBuffer();
         int b = 0;
-        while ((b = reader.read()) != -1) {  
+        while ((b = this.bis.read()) != -1) {  
             if (b == 0) {
                 break;
             }
@@ -87,21 +83,21 @@ public class DeSerializer {
     }
 
     private int readInteger() throws IOException {
-        return Conversion.getIntFromByteArray(reader.readNBytes(4));
+        return Utils.getIntFromByteArray(this.bis.readNBytes(4));
     }
 
     private double readDouble() throws IOException {
-        return ByteBuffer.wrap(reader.readNBytes(8)).getDouble();
+    	return Utils.getDoubleFromByteArray(this.bis.readNBytes(8));
     }
 
-    private boolean readBool() {
-        return Boolean.valueOf(String.valueOf(reader.read()));
+    private boolean readBool() throws IOException {
+    	return Utils.getBooleanFromByteArray(this.bis.readNBytes(1));
     }
 
     //Basic list
-    private List readList() throws IOException, TsonError {
+    private List<Object> readList() throws IOException, TsonError {
         long length = readLength();
-        List result = new ArrayList(); 
+        List<Object> result = new ArrayList<Object>(); 
         if (length > 0) {
         	for (int i = 0; i < length; i++) {
         		result.add(readObject());
@@ -111,13 +107,12 @@ public class DeSerializer {
     }
 
     //Basic map
-    private Map readMap() throws TsonError, IOException {
+    private Map<Object, Object> readMap() throws TsonError, IOException {
     	long length = readLength();
-        Map result = new LinkedHashMap();
+        Map<Object, Object> result = new LinkedHashMap<Object, Object>();
 
         if (length > 0) {
         	for (int i = 0; i < length; i++) {
-        		//System.out.println(String.format("index: %d", i));
                 Object key = readObject();
                 if (!(key instanceof String)) {
                 	System.out.println(key);
@@ -132,5 +127,4 @@ public class DeSerializer {
 	public Object getObject() {
         return object;
 	}
-
 }
