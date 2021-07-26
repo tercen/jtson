@@ -1,3 +1,5 @@
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -6,14 +8,14 @@ public class SerializerDeSerializerTest {
 	@Test
 	public void test() {
 		try {
-			Person input = new Person("Tercen");
-			byte[] result = jtson.encodeTSON(new Person("Tercen"));
+			Map input = TestUtils.createInputMap();
+			byte[] result = jtson.encodeTSON(input);
 			Object decodeOutput = jtson.decodeTSON(result);
 			
 			
 			Assert.assertEquals(input.getClass(), decodeOutput.getClass());
-			Person output = (Person) decodeOutput;
-			Assert.assertEquals(input.getName(), output.getName());
+			Map output = (Map) decodeOutput;
+			Assert.assertEquals(input.get("tercen"), output.get("tercen"));
 			
 			System.out.print(result);
 		} catch (Exception e) {

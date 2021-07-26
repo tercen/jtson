@@ -2,7 +2,7 @@ import java.io.IOException;
 
 public class jtson {
 	
-	public static byte[] encodeTSON(Object object) {
+	public static byte[] encodeTSON(Object object) throws IOException {
 	    return new Serializer(object).getBytes();
 	}	
 

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DeSerializerTest {
 
 	@Test
-	public void test() {
+	public void testInputOutput() {
 		File file = new File("test/test_data.tson");
 		try {
 			byte[] fileContent = Files.readAllBytes(file.toPath());
@@ -23,15 +23,12 @@ public class DeSerializerTest {
 			
 			InputStream testDataJson = new FileInputStream("test/test_data.json");
 			Map<String,Object> result = new ObjectMapper().readValue(testDataJson, LinkedHashMap.class);
-			Assert.assertEquals(result, object);
-			
+			Assert.assertEquals(result, object);	
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (TsonError e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
 
 }
