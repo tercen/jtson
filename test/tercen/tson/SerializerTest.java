@@ -20,9 +20,8 @@ public class SerializerTest {
 	public void test_empty_list() {
 		try {
 			byte[] result = jtson.encodeTSON(new ArrayList<>());
-			System.out.print(result);
 		} catch (Exception e) {
-			System.out.print("Cannot create empty list object");
+			Assert.fail("Cannot create empty list object");
 		}
 	}
 
@@ -39,7 +38,7 @@ public class SerializerTest {
 			Assert.assertTrue(Arrays.equals(result, output));
 
 		} catch (IOException e) {
-			System.out.print("testInputOutput error:" + e.getMessage());
+			Assert.fail("testInputOutput error:" + e.getMessage());
 		}
 	}
 }

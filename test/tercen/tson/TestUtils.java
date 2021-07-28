@@ -30,6 +30,10 @@ public class TestUtils {
 		list.add(false);
 		map.put("list", list);
 		
+		//empty list
+		ArrayList<Object> emptyList = new ArrayList<Object>();
+		map.put("list", emptyList);
+		
 		//typed lists
 		map.put("int8", new byte[] {-42, 42});
 		map.put("int16", new short[] {42, 42});

@@ -26,15 +26,9 @@ public class DeSerializerTest {
 			Map<String,Object> result = new ObjectMapper().readValue(testDataJson, LinkedHashMap.class);
 			Assert.assertEquals(result, object);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Assert.fail(e.getMessage());
 		} catch (TsonError e) {
-			e.printStackTrace();
+			Assert.fail(e.getMessage());
 		}
 	}
-	
-	@Test
-	public void testLength() {
-		//test 0 valid
-	}
-
 }

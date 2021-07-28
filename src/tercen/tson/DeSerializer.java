@@ -60,7 +60,6 @@ public class DeSerializer {
     //Add object
     private Object readObject() throws IOException, TsonError {
         int type = readType();
-        //System.out.println(String.format("Type: %d", type));
         if (type == Spec.NULL_TYPE) {
         	return(null);
         } else if (type == Spec.BOOL_TYPE) {

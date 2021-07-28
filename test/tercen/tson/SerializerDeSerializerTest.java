@@ -38,7 +38,7 @@ public class SerializerDeSerializerTest {
 			
 			Assert.assertEquals(input.get("cstringlist"), output.get("cstringlist"));
 		} catch (Exception e) {
-			System.out.print("SerializerDeSerializerTest error:" + e.getMessage());
+			Assert.fail("SerializerDeSerializerTest error:" + e.getMessage());
 		}
 	}
 }
