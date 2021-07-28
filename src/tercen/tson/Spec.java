@@ -1,7 +1,7 @@
 package tercen.tson;
 
 public final class Spec {
-	
+
 	public static final String TSON_SPEC_VERSION = "1.1.0";
 
 	public static final int TYPE_LENGTH_IN_BYTES = 1;

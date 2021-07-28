@@ -1,16 +1,17 @@
 package tercen.tson;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
- 
+
 public class DeSerializer {
-	
+
 	private Object object;
-	private ByteArrayInputStream bis; 
-	
+	private ByteArrayInputStream bis;
+
 	public DeSerializer(byte[] bytes) throws TsonError, IOException {
 		if (bytes == null) {
             throw new TsonError("Connection cannot be None.");
@@ -20,31 +21,31 @@ public class DeSerializer {
         	throw new TsonError("Connection buffer is empty.");
         }
         this.bis = new ByteArrayInputStream(bytes);
-        
+
         Object versionObject = readObject();
         if (!versionObject.getClass().getName().equals("java.lang.String")) {
         	throw new TsonError("wrong format -- expect version as str");
         }
-        
+
         String version = (String) versionObject;
         if (!version.equals(Spec.TSON_SPEC_VERSION)) {
-        	throw new TsonError("TSON version mismatch, found: %s, expected : %s".format(version, Spec.TSON_SPEC_VERSION));
+        	throw new TsonError(String.format(version, Spec.TSON_SPEC_VERSION));
         }
-                
+
         this.object = readObject();
 	}
-	
+
 	private int readType() throws IOException {
 		return(this.bis.read());
 	}
-	
+
 	byte[] readNBytes(int n) {
 		byte[] bytes = new byte[n];
 		int offset = 0;
 		while (n-offset > 0) {
 			offset += this.bis.read(bytes, offset, n-offset);
 		}
-		
+
 		return bytes;
 	}
 
@@ -83,7 +84,7 @@ public class DeSerializer {
     private String readString() throws IOException {
         StringBuffer result = new StringBuffer();
         int b = 0;
-        while ((b = this.bis.read()) != -1) {  
+        while ((b = this.bis.read()) != -1) {
             if (b == 0) {
                 break;
             }
@@ -108,7 +109,7 @@ public class DeSerializer {
     //Basic list
     private List<Object> readList() throws IOException, TsonError {
         long length = readLength();
-        List<Object> result = new ArrayList<Object>(); 
+        List<Object> result = new ArrayList<>();
         if (length > 0) {
         	for (int i = 0; i < length; i++) {
         		result.add(readObject());
@@ -120,7 +121,7 @@ public class DeSerializer {
     //Basic map
     private Map<Object, Object> readMap() throws TsonError, IOException {
     	long length = readLength();
-        Map<Object, Object> result = new LinkedHashMap<Object, Object>();
+        Map<Object, Object> result = new LinkedHashMap<>();
 
         if (length > 0) {
         	for (int i = 0; i < length; i++) {
@@ -130,11 +131,11 @@ public class DeSerializer {
                     throw new TsonError("Key in map is not a string");
                 }
                 result.put(key, readObject());
-            }   
+            }
         }
         return result;
     }
-	
+
 	public Object getObject() {
         return object;
 	}

@@ -1,3 +1,4 @@
+package tercen.tson;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,13 +21,13 @@ public class SerializerTest {
 	@Test
 	public void test_empty_list() {
 		try {
-			byte[] result = jtson.encodeTSON(new ArrayList<Object>());
+			byte[] result = jtson.encodeTSON(new ArrayList<>());
 			System.out.print(result);
 		} catch (Exception e) {
 			System.out.print("Cannot create empty list object");
 		}
 	}
-	
+
 	@Test
 	public void testInputOutput() {
 		File file = new File("test/test_data.json");
@@ -35,10 +36,10 @@ public class SerializerTest {
 			Map<String,Object> object = new ObjectMapper().readValue(testDataJson, LinkedHashMap.class);
 			byte[] result = jtson.encodeTSON(object);
 			byte[] output = Files.readAllBytes(new File("test/test_data.tson").toPath());
-			
+
 			Assert.assertTrue(result.length == output.length);
 			Assert.assertTrue(Arrays.equals(result, output));
-			
+
 		} catch (IOException e) {
 			System.out.print("testInputOutput error:" + e.getMessage());
 		}

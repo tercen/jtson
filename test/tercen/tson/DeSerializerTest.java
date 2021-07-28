@@ -1,3 +1,4 @@
+package tercen.tson;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,10 +24,10 @@ public class DeSerializerTest {
 			byte[] fileContent = Files.readAllBytes(file.toPath());
 			Object object = jtson.decodeTSON(fileContent);
 			System.out.println(object);
-			
+
 			InputStream testDataJson = new FileInputStream("test/test_data.json");
 			Map<String,Object> result = new ObjectMapper().readValue(testDataJson, LinkedHashMap.class);
-			Assert.assertEquals(result, object);	
+			Assert.assertEquals(result, object);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (TsonError e) {
