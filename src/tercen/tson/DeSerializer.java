@@ -39,7 +39,7 @@ public class DeSerializer {
 		return(this.bis.read());
 	}
 
-	byte[] readNBytes(int n) {
+	private byte[] readNBytes(int n) {
 		byte[] bytes = new byte[n];
 		int offset = 0;
 		while (n-offset > 0) {
@@ -75,6 +75,26 @@ public class DeSerializer {
         	return(readList());
         } else if (type == Spec.MAP_TYPE) {
         	return(readMap());
+        } else if (type == Spec.LIST_UINT8_TYPE) {
+        	throw new TsonError("ReadObject: LIST_UINT8_TYPE not supported yet.");
+        } else if (type == Spec.LIST_UINT16_TYPE) {
+        	throw new TsonError("ReadObject: LIST_UINT16_TYPE not supported yet.");
+        } else if (type == Spec.LIST_UINT32_TYPE) {
+        	throw new TsonError("ReadObject: LIST_UINT32_TYPE not supported yet.");
+        } else if (type == Spec.LIST_INT8_TYPE) {
+        	return(readByteArray());
+        } else if (type == Spec.LIST_INT16_TYPE) {
+        	return(readShortArray());
+        } else if (type == Spec.LIST_INT32_TYPE) {
+        	return(readIntArray());
+        } else if (type == Spec.LIST_INT64_TYPE) {
+        	return(readLongArray());
+        } else if (type == Spec.LIST_FLOAT32_TYPE) {
+        	return(readFloatArray());
+        } else if (type == Spec.LIST_FLOAT64_TYPE) {
+        	return(readDoubleArray());
+        } else if (type == Spec.LIST_STRING_TYPE) {
+        	return(readCStringList());
         } else {
         	return(null);
         }
@@ -135,7 +155,42 @@ public class DeSerializer {
         }
         return result;
     }
-
+    
+    private byte[] readByteArray() throws TsonError, IOException {
+        long length = readLength();
+        return this.readNBytes((int) length);
+    }
+    
+    private short[] readShortArray() throws TsonError, IOException {
+        long length = readLength();
+        return Utils.getShortArrayFromByteArray(this.readNBytes((int) length * 2));
+    }
+    
+    private int[] readIntArray() throws TsonError, IOException {
+        long length = readLength();
+        return Utils.getIntArrayFromByteArray(this.readNBytes((int) length * 4));
+    }
+    
+    private long[] readLongArray() throws TsonError, IOException {
+        long length = readLength();
+        return Utils.getLongArrayFromByteArray(this.readNBytes((int) length * 8));
+    }
+    
+    private float[] readFloatArray() throws TsonError, IOException {
+        long length = readLength();
+        return Utils.getFloatArrayFromByteArray(this.readNBytes((int) length * 4));
+    }
+    
+    private double[] readDoubleArray() throws TsonError, IOException {
+        long length = readLength();
+        return Utils.getDoubleArrayFromByteArray(this.readNBytes((int) length * 8));
+    }
+    
+    private CStringList readCStringList() throws TsonError, IOException {
+    	long length = readLength();
+    	return new CStringList(this.readNBytes((int) length));
+    }
+	
 	public Object getObject() {
         return object;
 	}

@@ -1,4 +1,5 @@
 package tercen.tson;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -42,15 +43,19 @@ public class Serializer {
 			this.addDouble((Double) obj);
 		} else if (obj instanceof Boolean) {
 			this.addBoolean((Boolean) obj);
+		} else if (obj instanceof CStringList) {
+			this.addStringList((CStringList) obj);
 		} else if (obj instanceof List) {
 			this.addList((List) obj);
 		} else if (obj instanceof Map) {
 			this.addMap((Map) obj);
+		} else if (obj.getClass().isArray()) {
+			this.addArray(obj);
 		} else {
 			throw new TsonError("Unknown object type.");
 		}
 	}
-
+	
 	// Basic types (null, string, integer, double, bool)
 	private void addNull() throws UnsupportedEncodingException {
 		 this.addType(Spec.NULL_TYPE);
@@ -84,6 +89,45 @@ public class Serializer {
         for (Object item : list) {
         	this.addObject(item);
         }
+	}
+	
+	private void addArray(Object obj) throws IOException, TsonError {
+		if (obj instanceof byte[]) {
+			byte[] input = (byte[]) obj;
+			this.addIntArrayProperties(Spec.LIST_INT8_TYPE, input.length);
+			this.bos.write(input);
+		} else if (obj instanceof short[]) {
+			short[] input = (short[]) obj;
+			this.addIntArrayProperties(Spec.LIST_INT16_TYPE, input.length);
+			this.bos.write(Utils.getBytesFromShortArray(input));
+		} else if (obj instanceof int[]) {
+			int[] input = (int[]) obj;
+			this.addIntArrayProperties(Spec.LIST_INT32_TYPE, input.length);
+			this.bos.write(Utils.getBytesFromIntArray(input));
+		} else if (obj instanceof long[]) {
+			long[] input = (long[]) obj;
+			this.addIntArrayProperties(Spec.LIST_INT64_TYPE, input.length);
+			this.bos.write(Utils.getBytesFromLongArray(input));
+		} else if (obj instanceof float[]) {
+			float[] input = (float[]) obj;
+			this.addIntArrayProperties(Spec.LIST_FLOAT32_TYPE, input.length);
+			this.bos.write(Utils.getBytesFromFloatArray(input));
+		} else if (obj instanceof double[]) {
+			double[] input = (double[]) obj;
+			this.addIntArrayProperties(Spec.LIST_FLOAT64_TYPE, input.length);
+			this.bos.write(Utils.getBytesFromDoubleArray(input));
+		} 
+	}
+	
+	private void addIntArrayProperties(int type, int length) throws IOException { 
+        this.addType(type);
+        this.addLength(length);
+	}
+
+	private void addStringList(CStringList obj) throws IOException {
+        this.addType(Spec.LIST_STRING_TYPE);
+        this.addLength(obj.lengthInBytes());
+        this.bos.write(obj.toBytes());
 	}
 
 	private void addMap(Map obj) throws IOException, TsonError {

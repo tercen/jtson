@@ -31,5 +31,10 @@ public class DeSerializerTest {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void testLength() {
+		//test 0 valid
+	}
 
 }

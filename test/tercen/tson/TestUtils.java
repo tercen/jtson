@@ -1,32 +1,43 @@
 package tercen.tson;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class TestUtils {
 
 	public static final String TEST_RESOURCES_DIR = "test/resources/";
 	
-	public static Map createInputMap() {
-		Map<String, Object> map = new LinkedHashMap<>();
+	public static LinkedHashMap<String, Object> createInputMap() {
+		LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
 		map.put("null", null);
-		map.put("string", "tercen");
-		map.put("integer", 10);
-		map.put("double", 3.0);
-		map.put("boolean", true);
-		map.put("boolean_f", false);
-
-		Map<String, Object> subMap = new LinkedHashMap<>();
-		subMap.put("double", 42.0);
+		map.put("string", "hello");
+		map.put("integer", 42);
+		map.put("double", 42.0);
+		map.put("bool_t", true);
+		map.put("bool_f", false);
+		
+		//map
+		LinkedHashMap<String, Object> subMap = new LinkedHashMap<String, Object>();
+		subMap.put("string", "42");
 		map.put("map", subMap);
-
-		List<Object> list = new ArrayList<>();
-		list.add("Tercen Platform");
-		list.add(10);
-		list.add(3.0);
+		
+		//normal list
+		ArrayList<Object> list = new ArrayList<Object>();
+		list.add(42);
+		list.add("42");
+		list.add(subMap);
 		list.add(false);
 		map.put("list", list);
+		
+		//typed lists
+		map.put("int8", new byte[] {-42, 42});
+		map.put("int16", new short[] {42, 42});
+		map.put("int32", new int[]{42, 42});
+		map.put("int64", new long[]{42, 42});
+		map.put("float32", new float[]{42.0f, 42.0f});
+		map.put("float64", new double[]{42.0, 42.0});
+		map.put("cstringlist", new CStringList(new ArrayList<>( Arrays.asList("42.0", "42"))));
 		return map;
 	}
 }
