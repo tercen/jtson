@@ -3,6 +3,8 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import tercen.tson.jtson;
+
 public class SerializerDeSerializerTest {
 
 	@Test

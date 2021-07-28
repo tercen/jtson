@@ -1,3 +1,4 @@
+package tercen.tson;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class DeSerializer {
 	private long readLength() throws TsonError, IOException {
 		int len = Utils.getIntFromByteArray(this.readNBytes(4));
 
-        if (len <= 0)
+        if (len < 0)
         	throw new TsonError(String.format("Found invalid length %d", len));
         return len;
 	}

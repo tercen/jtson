@@ -1,3 +1,4 @@
+package tercen.tson;
 
 public class TsonError extends Exception {
 	

@@ -11,6 +11,9 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import tercen.tson.TsonError;
+import tercen.tson.jtson;
+
 public class DeSerializerTest {
 
 	@Test

@@ -13,6 +13,8 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import tercen.tson.jtson;
+
 public class SerializerTest {
 
 	@Test
