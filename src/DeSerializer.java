@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
+ 
 public class DeSerializer {
 	
 	private Object object;
@@ -36,9 +36,19 @@ public class DeSerializer {
 	private int readType() throws IOException {
 		return(this.bis.read());
 	}
+	
+	byte[] readNBytes(int n) {
+		byte[] bytes = new byte[n];
+		int offset = 0;
+		while (n-offset > 0) {
+			offset += this.bis.read(bytes, offset, n-offset);
+		}
+		
+		return bytes;
+	}
 
 	private long readLength() throws TsonError, IOException {
-		int len = Utils.getIntFromByteArray(this.bis.readNBytes(4));
+		int len = Utils.getIntFromByteArray(this.readNBytes(4));
 
         if (len <= 0)
         	throw new TsonError(String.format("Found invalid length %d", len));
@@ -83,15 +93,15 @@ public class DeSerializer {
     }
 
     private int readInteger() throws IOException {
-        return Utils.getIntFromByteArray(this.bis.readNBytes(4));
+        return Utils.getIntFromByteArray(this. readNBytes(4));
     }
 
     private double readDouble() throws IOException {
-    	return Utils.getDoubleFromByteArray(this.bis.readNBytes(8));
+    	return Utils.getDoubleFromByteArray(this. readNBytes(8));
     }
 
     private boolean readBool() throws IOException {
-    	return Utils.getBooleanFromByteArray(this.bis.readNBytes(1));
+    	return Utils.getBooleanFromByteArray(this. readNBytes(1));
     }
 
     //Basic list
