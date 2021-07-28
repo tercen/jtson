@@ -6,6 +6,8 @@ import java.util.Map;
 
 public class TestUtils {
 
+	public static final String TEST_RESOURCES_DIR = "test/resources/";
+	
 	public static Map createInputMap() {
 		Map<String, Object> map = new LinkedHashMap<>();
 		map.put("null", null);

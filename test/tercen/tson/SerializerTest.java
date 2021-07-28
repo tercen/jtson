@@ -14,8 +14,6 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tercen.tson.jtson;
-
 public class SerializerTest {
 
 	@Test
@@ -30,12 +28,12 @@ public class SerializerTest {
 
 	@Test
 	public void testInputOutput() {
-		File file = new File("test/test_data.json");
+		File file = new File(TestUtils.TEST_RESOURCES_DIR + "test_data.json");
 		try {
 			InputStream testDataJson = new FileInputStream(file);
 			Map<String,Object> object = new ObjectMapper().readValue(testDataJson, LinkedHashMap.class);
 			byte[] result = jtson.encodeTSON(object);
-			byte[] output = Files.readAllBytes(new File("test/test_data.tson").toPath());
+			byte[] output = Files.readAllBytes(new File(TestUtils.TEST_RESOURCES_DIR + "test_data.tson").toPath());
 
 			Assert.assertTrue(result.length == output.length);
 			Assert.assertTrue(Arrays.equals(result, output));

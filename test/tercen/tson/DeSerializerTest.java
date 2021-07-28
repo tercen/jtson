@@ -12,20 +12,17 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tercen.tson.TsonError;
-import tercen.tson.jtson;
-
 public class DeSerializerTest {
 
 	@Test
 	public void testInputOutput() {
-		File file = new File("test/test_data.tson");
+		File file = new File(TestUtils.TEST_RESOURCES_DIR + "test_data.tson");
 		try {
 			byte[] fileContent = Files.readAllBytes(file.toPath());
 			Object object = jtson.decodeTSON(fileContent);
 			System.out.println(object);
 
-			InputStream testDataJson = new FileInputStream("test/test_data.json");
+			InputStream testDataJson = new FileInputStream(TestUtils.TEST_RESOURCES_DIR + "test_data.json");
 			Map<String,Object> result = new ObjectMapper().readValue(testDataJson, LinkedHashMap.class);
 			Assert.assertEquals(result, object);
 		} catch (IOException e) {
