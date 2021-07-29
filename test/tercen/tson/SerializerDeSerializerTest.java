@@ -18,7 +18,7 @@ public class SerializerDeSerializerTest {
 			Assert.assertEquals(input.getClass(), decodeOutput.getClass());
 			LinkedHashMap<String, Object> output = (LinkedHashMap<String, Object>) decodeOutput;
 
-			//basic type
+			// basic type
 			Assert.assertEquals(input.get("null"), output.get("null"));
 			Assert.assertEquals(input.get("string"), output.get("string"));
 			Assert.assertEquals(input.get("integer"), output.get("integer"));
@@ -27,7 +27,7 @@ public class SerializerDeSerializerTest {
 			Assert.assertEquals(input.get("bool_f"), output.get("bool_f"));
 			Assert.assertEquals(input.get("map"), output.get("map"));
 			Assert.assertEquals(input.get("list"), output.get("list"));
-			
+
 			// special lists
 			Assert.assertTrue(Arrays.equals((byte[]) input.get("int8"), (byte[]) output.get("int8")));
 			Assert.assertTrue(Arrays.equals((short[]) input.get("int16"), (short[]) output.get("int16")));
@@ -35,10 +35,24 @@ public class SerializerDeSerializerTest {
 			Assert.assertTrue(Arrays.equals((long[]) input.get("int64"), (long[]) output.get("int64")));
 			Assert.assertTrue(Arrays.equals((float[]) input.get("float32"), (float[]) output.get("float32")));
 			Assert.assertTrue(Arrays.equals((double[]) input.get("float64"), (double[]) output.get("float64")));
-			
+
 			Assert.assertEquals(input.get("cstringlist"), output.get("cstringlist"));
 		} catch (Exception e) {
 			Assert.fail("SerializerDeSerializerTest error:" + e.getMessage());
 		}
 	}
+
+	@Test
+	public void testUnsupported() {
+		try {
+			LinkedHashMap<String, Object> input = TestUtils.createUnsupportedInputMap();
+			byte[] result = jtson.encodeTSON(input);
+
+			Assert.fail("Unsupported data types should not pass encoding");
+
+		} catch (Exception e) {
+			// expected
+		}
+	}
+
 }

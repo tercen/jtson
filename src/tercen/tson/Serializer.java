@@ -11,16 +11,10 @@ public class Serializer {
 
 	private ByteArrayOutputStream bos;
 
-	public Serializer(Object obj) {
+	public Serializer(Object obj) throws IOException, TsonError {
 		this.bos = new ByteArrayOutputStream();
-		try {
-			this.addString(Spec.TSON_SPEC_VERSION);
-			this.addObject(obj);
-		} catch (TsonError e) {
-			e.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		this.addString(Spec.TSON_SPEC_VERSION);
+		this.addObject(obj);
 	}
 
 	private void addType(int type) throws UnsupportedEncodingException {
@@ -55,10 +49,10 @@ public class Serializer {
 			throw new TsonError("Unknown object type.");
 		}
 	}
-	
+
 	// Basic types (null, string, integer, double, bool)
 	private void addNull() throws UnsupportedEncodingException {
-		 this.addType(Spec.NULL_TYPE);
+		this.addType(Spec.NULL_TYPE);
 	}
 
 	private void addString(String obj) throws IOException {
@@ -84,13 +78,13 @@ public class Serializer {
 
 	private void addList(List<Object> list) throws IOException, TsonError {
 		this.addType(Spec.LIST_TYPE);
-        this.addLength(list.size());
+		this.addLength(list.size());
 
-        for (Object item : list) {
-        	this.addObject(item);
-        }
+		for (Object item : list) {
+			this.addObject(item);
+		}
 	}
-	
+
 	private void addArray(Object obj) throws IOException, TsonError {
 		if (obj instanceof byte[]) {
 			byte[] input = (byte[]) obj;
@@ -116,18 +110,20 @@ public class Serializer {
 			double[] input = (double[]) obj;
 			this.addIntArrayProperties(Spec.LIST_FLOAT64_TYPE, input.length);
 			this.bos.write(Utils.getBytesFromDoubleArray(input));
-		} 
+		} else {
+			throw new TsonError("Unknown object type.");
+		}
 	}
-	
-	private void addIntArrayProperties(int type, int length) throws IOException { 
-        this.addType(type);
-        this.addLength(length);
+
+	private void addIntArrayProperties(int type, int length) throws IOException {
+		this.addType(type);
+		this.addLength(length);
 	}
 
 	private void addStringList(CStringList obj) throws IOException {
-        this.addType(Spec.LIST_STRING_TYPE);
-        this.addLength(obj.lengthInBytes());
-        this.bos.write(obj.toBytes());
+		this.addType(Spec.LIST_STRING_TYPE);
+		this.addLength(obj.lengthInBytes());
+		this.bos.write(obj.toBytes());
 	}
 
 	private void addMap(Map obj) throws IOException, TsonError {
@@ -135,12 +131,12 @@ public class Serializer {
 		this.addLength(obj.size());
 
 		for (Object key : obj.keySet()) {
-            if (!(key instanceof String)) {
-                throw new TsonError("Map key must be a String.");
-            }
-            this.addObject(key);
-            this.addObject(obj.get(key));
-        }
+			if (!(key instanceof String)) {
+				throw new TsonError("Map key must be a String.");
+			}
+			this.addObject(key);
+			this.addObject(obj.get(key));
+		}
 	}
 
 	public byte[] getBytes() {

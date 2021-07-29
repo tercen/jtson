@@ -1,4 +1,5 @@
 package tercen.tson;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class SerializerTest {
 		File file = new File(TestUtils.TEST_RESOURCES_DIR + "test_data.json");
 		try {
 			InputStream testDataJson = new FileInputStream(file);
-			Map<String,Object> object = new ObjectMapper().readValue(testDataJson, LinkedHashMap.class);
+			Map<String, Object> object = new ObjectMapper().readValue(testDataJson, LinkedHashMap.class);
 			byte[] result = jtson.encodeTSON(object);
 			byte[] output = Files.readAllBytes(new File(TestUtils.TEST_RESOURCES_DIR + "test_data.tson").toPath());
 
@@ -38,6 +39,8 @@ public class SerializerTest {
 			Assert.assertTrue(Arrays.equals(result, output));
 
 		} catch (IOException e) {
+			Assert.fail("testInputOutput error:" + e.getMessage());
+		} catch (TsonError e) {
 			Assert.fail("testInputOutput error:" + e.getMessage());
 		}
 	}
