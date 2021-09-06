@@ -6,7 +6,7 @@ Java implementation of [TSON specification](https://github.com/tercen/TSON).
 
 ```shell
 mvn install:install-file \
-   -Dfile=target/jtson-0.0.3-SNAPSHOT.jar \
+   -Dfile=target/jtson-0.0.4-SNAPSHOT.jar \
    -DgroupId=com.tercen\
    -DartifactId=jtson \
    -Dversion=0.0.4 \

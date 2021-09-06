@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.tercen</groupId>
 	<artifactId>jtson</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>JTSON</name>
+	<name>jtson</name>
 	<description>Java TSON implementation</description>
 	<url>https://github.com/tercen/jtson</url>
 
@@ -119,6 +119,11 @@
 		<repository>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/tercen/jtson</url>
 		</repository>
 	</distributionManagement>
 
